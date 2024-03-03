@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import com.example.tunehub.Repository.PlayListRepository;
 import com.example.tunehub.entity.PlayList;
-import com.example.tunehub.entity.Songs;
 
 @Service
 public class PlayListServiceImplementation implements PlayListService{
@@ -17,6 +16,11 @@ public class PlayListServiceImplementation implements PlayListService{
 	@Override
 	public void addplaylist(PlayList playlist) {
 		Prepo.save(playlist);
+	}
+
+	@Override
+	public List<PlayList> fetchplaylists(int id) {
+		return Prepo.findById(id);
 	}
 
 	@Override

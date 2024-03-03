@@ -7,9 +7,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import com.example.tunehub.Repository.PlayListRepository;
 import com.example.tunehub.entity.PlayList;
 import com.example.tunehub.entity.Songs;
 import com.example.tunehub.entity.User;
@@ -50,18 +51,24 @@ public class PlayListController {
 	}
 	
 	@GetMapping("/viewplaylist")
-	public String viewplaylist(Model model,HttpSession session) {
+	public String viewplaylist(@RequestParam String playlistId,Model model,HttpSession session) {
 		String email=(String) session.getAttribute("email");
 		User user=Uservice.getuser(email);
-		System.out.println(email);
+		String role=user.getRole();
 		boolean primestatus=user.isIspremium();
-		if(primestatus==true) {
-			List<PlayList> playlist=Pserv.fetchplaylists();
-			model.addAttribute("playlist",playlist);
-			return "viewplaylist";
-		}else {
-			return "/makepayment";
+		List<PlayList> playlist=Pserv.fetchplaylists(Integer.parseInt(playlistId));
+		if(role.equalsIgnoreCase("user")){
+			if(primestatus==true) {
+				model.addAttribute("playlist",playlist);
+				return "showplaylistsongs";
+			}else {
+				return "/makepayment";
+			}
+		}else{
+				model.addAttribute("playlist",playlist);
+				return "showplaylistsongs";
 		}
+		
 	}
 	
 	@GetMapping("/showplaylist")

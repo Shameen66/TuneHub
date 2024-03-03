@@ -24,93 +24,43 @@
     text-align: center;
     }
     
-     .img{
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 10px;
+    .table-container {
+        margin: 100px auto; /* Centering the table container */
+        width: 90%; /* Adjusting width to 90% of the viewport */
+        max-width: 1200px; /* Setting a maximum width to avoid excessive stretching on larger screens */
+    }
+
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: center; /* Aligning text in the center */
+    }
+
+    .table th,
+    .table td {
+        border: 1px solid #dddddd;
+        text-align: center;
+        padding: 8px;
+    }
+
+    .table th {
+        background-color: #f2f2f2;
+    }
+
+    .view-playlist-btn {
+        padding: 8px 12px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        text-decoration: none; /* Removing text decoration */
+        display: inline-block; /* Ensuring the button behaves like a block element */
+    }
+    .tab-con{
+        width: 100%;
     }
     
-    img{
-        width: 200px;
-        height: 140px;
-        object-fit: cover;
-        border-radius: 5px;
-    }
-    .card{
-        width: 220px;
-        height: 325px;
-        background-color: rgb(31, 31, 30);
-        color: white;
-        border-radius: 5px;
-    }
-    .info{
-        padding: 20px 15px;
-        height:130px;
-        margin-top:-20px;
-        border-radius: 0px 0px 5px 5px;
-        gap: 0px;
-    }
-    .info h5{
-        margin-bottom: 1px;
-    }
-    .info p{
-        font-size: 10px;
-        margin-top: 1px;
-    }
-
-    .hero{
-        display: grid;
-        grid-template-columns:200px 200px 200px 200px 200px 200px;
-        grid-template-rows:350px ;
-        align-items: center;
-        justify-content: space-evenly;
-        gap: 5px;
-        padding: 5px;
-    }
-    audio{
-        width: 180px;
-        height: 30px;
-    }
-    .audio{
-    height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    }
-    @media screen and (max-width:1400px) {
-        .hero{
-        display: grid;
-        grid-template-columns:200px 200px 200px 200px;
-        grid-template-rows:350px 350px 350px;
-        }
-    }
-
-    @media screen and (max-width:950px) {
-        .hero{
-        display: grid;
-        grid-template-columns:200px 200px 200px ;
-        grid-template-rows:350px 350px 350px 350px ;
-        }
-    }
-
-    @media screen and (max-width:700px) {
-        .hero{
-        display: grid;
-        grid-template-columns:200px 200px ;
-        grid-template-rows:350px 350px 350px 350px 350px 350px ;
-        }
-    }
-
-    @media screen and (max-width:500px) {
-        .hero{
-        display: grid;
-        grid-template-columns:200px ;
-        grid-template-rows:350px;
-        gap: 10px;
-        }
-       
-    }
 </style>
 <body>
  <nav class="navbar navbar-expand-lg fixed-top bg-white">
@@ -143,33 +93,38 @@
       </div>
     </div>
   </nav>
+  <div class="tab-con">
+  <div class="table-container">
+       <!-- Add hidden input to carry playlistId -->
+      <table class="table">
+          <thead>
+              <tr>
+                  <th>Playlist No</th>
+                  <th>Playlist Name</th>
+                  <th>Actions</th>
+              </tr>
+          </thead>
+          <tbody>
+              <!-- Assuming playlists is a list of playlists -->
+              <tr th:each="playlist:${playlist}">
+
+                  <td th:text="${playlist.id}"></td>
+                  <td th:text="${playlist.playListName}"></td>
+                  <td>                  
+                    <form action="/viewplaylist" method="get">
+                      <input type="hidden" name="playlistId" th:value="${playlist.id}" />
+                      <button type="submit" class="view-playlist-btn">View Playlist</button>
+                  </form>
+                  
+                  
+                  </td> <!-- Change anchor to button -->
+              </tr>
+          </tbody>
+      </table>
   
-  <div th:each="playlist:${playlist}" class="playName">
-  	<h3 th:text="${playlist.playListName}"></h3>
-  
-    <div class="hero"  th:each="playlist:${playlist}" >
-    	
-        <div class="card" th:each="song:${playlist.song}">
-        
-            <div class="img">
-              <img th:src="'data:image/jpeg;base64,' + ${song.imagedata}" alt="Song Image" />
-            </div>
-            
-           <div class="info" >
-                <h5 th:text="${song.songName}"></h5>
-                <p th:text="${song.songArtist}"></p>
-                <p th:text="${song.songGenre}"></p>
-            </div>
-            
-            <div class="audio">
-            <audio controls>
-            <source th:src="${song.songLink}" type="audio/mpeg"></source>
-        	</audio>
-            </div>
-            
-        </div>
-    </div>
-     </div >
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-</html> 
+</html>
